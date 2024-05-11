@@ -1,0 +1,51 @@
+version: '3.9'
+services:
+  # Apache webserver service
+  webserver:
+    container_name: PHP-webServer
+    build:
+    # Dockerfile path
+      context: .
+      dockerfile: Dockerfile
+    # Mount the local ./app directory to /var/www/html in the container
+    volumes:
+      - ./app:/var/www/html 
+      - ./config/xdebug8.2.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini # for xdebug
+      - ./config/custom-php.ini:/usr/local/etc/php/conf.d/custom-php.ini # for error reporting
+      - ./config/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini # for error reporting
+      - ./config/apache.conf:/etc/apache2/sites-available/000-default.conf:ro # apache config
+    # Map port 8000 on the host to port 80 on the container 
+    ports:
+      - 8000:80
+    expose:
+      - 9003
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:16.0
+    environment:
+      POSTGRES_DB: test_database
+      POSTGRES_USER: db_user
+      POSTGRES_PASSWORD: db_password
+    ports:
+      - "5432:5432"  
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      # Default email for pgAdmin 4
+      PGADMIN_DEFAULT_EMAIL: admin@email.com
+      # Password for accessing pgAdmin 4
+      PGADMIN_DEFAULT_PASSWORD: adminpassword
+    ports:
+      # Expose pgadmin on 5050 
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    restart: always
+volumes:
+  pgadmin_data:
