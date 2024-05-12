@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
    git \
    curl \
    # pdo_pgsql require libpq-dev
-   libpq-dev \ 
+   libpq-dev \
    # mbstring require libonig-dev
    libonig-dev \
    # zip require libzip-dev
@@ -27,8 +27,8 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
    # intl require libicu-dev \
    libicu-dev \
    iputils-ping \
-   telnet \ 
-   nodejs \ 
+   telnet \
+   nodejs \
    npm
 
 # Clear cache
@@ -38,14 +38,14 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN docker-php-ext-install pdo_pgsql pgsql mbstring zip exif pcntl gmp
 #RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg
-RUN docker-php-ext-configure intl 
+RUN docker-php-ext-configure intl
 RUN docker-php-ext-install gd intl
 
 # Install Xdebug
 RUN pecl install xdebug \
    && docker-php-ext-enable xdebug \
    && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-   && echo "xdebug.remote_host = host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini 
+   && echo "xdebug.remote_host = host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 
 # Clear cache
