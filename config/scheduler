@@ -1,2 +1,0 @@
-* * * * * /usr/local/bin/php /var/www/html/hellobill-cache/artisan schedule:run >> /var/www/html/hellobill-cache/storage/logs/cron.log 2>&1
-* * * * * /bin/date >> /tmp/cron_output
