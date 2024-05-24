@@ -17,9 +17,8 @@ services:
       - ./config/apache.conf:/etc/apache2/sites-available/000-default.conf:ro # apache config
     # Map port 8000 on the host to port 8000 on the container
     ports:
-      # - "8080:80"
-      - "8000:8000"
-      # - "80:80"
+      - "80:80"
+      - "5173:5173"  # Add this line to map the Vite port
     expose:
       - 9003
     extra_hosts:

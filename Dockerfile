@@ -55,9 +55,12 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN a2enmod rewrite \
    && /etc/init.d/apache2 restart
 
-# Copy configs
-COPY config/xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+# Copy PHP configurations
+COPY config/xdebug8.2.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 COPY config/custom-php.ini /usr/local/etc/php/conf.d/custom-php.ini
+COPY config/error_reporting.ini /usr/local/etc/php/conf.d/error_reporting.ini
+
+# Copy the default Apache configuration
 COPY config/apache.conf /etc/apache2/sites-available/000-default.conf
 
 WORKDIR /var/www/html
