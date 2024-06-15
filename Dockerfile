@@ -48,13 +48,6 @@ RUN pecl install xdebug \
    && echo "xdebug.remote_host = host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# enable mod rewrite
-RUN a2enmod rewrite \
-   && /etc/init.d/apache2 restart
-
 # Copy PHP configurations
 COPY config/xdebug8.2.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 COPY config/custom-php.ini /usr/local/etc/php/conf.d/custom-php.ini
@@ -62,6 +55,13 @@ COPY config/error_reporting.ini /usr/local/etc/php/conf.d/error_reporting.ini
 
 # Copy the default Apache configuration
 COPY config/apache.conf /etc/apache2/sites-available/000-default.conf
+
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# enable mod rewrite
+RUN a2enmod rewrite
+RUN service apache2 restart
 
 WORKDIR /var/www/html
 USER www-data
